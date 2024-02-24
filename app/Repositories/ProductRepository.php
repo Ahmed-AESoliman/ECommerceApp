@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Http\Requests\ProductFilterRequest;
 use App\Http\Resources\ProductCollection;
+use App\Http\Resources\ProductDetailsResource;
+use App\Http\Resources\ProductListCollection;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SingleProductResource;
 use App\Http\Responses\ApiResponse;
@@ -24,10 +26,21 @@ class ProductRepository implements ProductRepositoryInterface
     public function index(Request|ProductFilterRequest $request): ProductCollection
     {
         return new ProductCollection(
-            $this->model->with(['mainCategory', 'subCategory'])->filter($request)->paginate($request->input('page_size'))
+            $this->model->with(['mainCategory', 'subCategory', 'attachments'])->filter($request)->paginate($request->input('page_size'))
         );
     }
 
+    public function productList(ProductFilterRequest $request): ProductListCollection
+    {
+        return new ProductListCollection(
+            $this->model->with(['mainCategory', 'subCategory', 'attachments'])->filter($request)->paginate($request->input('page_size'))
+        );
+    }
+
+    public function productDetails(Product $product): JsonResponse
+    {
+        return ApiResponse::success(new ProductDetailsResource($product->with(['mainCategory', 'subCategory', 'attachments'])->first()));
+    }
     public function store(array $data): JsonResponse
     {
         try {

@@ -45,5 +45,7 @@ Route::group(
             Route::post('/remove/{product}', 'ShoppingCartController@removeProduct');
             Route::post('/checkout-order', 'OrderController@createOrder');
         });
+        Route::get('/product-list', 'ProductController@productList');
+        Route::get('/product-show/{product}', 'ProductController@singleProduct');
     }
 );

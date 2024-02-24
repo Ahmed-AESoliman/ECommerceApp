@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductFilterRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductDetailsResource;
+use App\Http\Resources\ProductListCollection;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -76,5 +78,19 @@ class ProductController extends Controller
     public function delete(Product $product): JsonResponse
     {
         return $this->productRepository->delete($product);
+    }
+
+    /**
+     * @param ProductFilterRequest $prorequestduct
+     * @return ProductListCollection
+     */
+    public function productList(ProductFilterRequest $request): ProductListCollection
+    {
+        return $this->productRepository->productList($request);
+    }
+
+    public function singleProduct(Product $product): JsonResponse
+    {
+        return $this->productRepository->productDetails($product);
     }
 }
