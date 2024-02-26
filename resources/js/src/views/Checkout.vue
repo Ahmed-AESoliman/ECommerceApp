@@ -73,7 +73,9 @@
                     placeholder="ahmed soliman"
                     class="form-control"
                   />
-                  <ErrorMessage name="customer_name" />
+                  <ErrorMessage name="customer_name" v-slot="{message}">
+                    <p class="text-danger">{{ message }}</p>
+                  </ErrorMessage>
                 </div>
               </div>
               <div class="col-12 col-md-6">
@@ -85,7 +87,9 @@
                     :rules="validateEmail"
                     class="form-control"
                   />
-                  <ErrorMessage name="customer_email" />
+                  <ErrorMessage name="customer_email" v-slot="{message}">
+                    <p class="text-danger">{{ message }}</p>
+                  </ErrorMessage>
                 </div>
               </div>
               <div class="col-12 col-md-6">
@@ -98,7 +102,9 @@
                     class="form-control"
                     placeholder="01112005445"
                   />
-                  <ErrorMessage name="customer_phone" />
+                  <ErrorMessage name="customer_phone" v-slot="{message}" >
+                    <p class="text-danger">{{ message }}</p>
+                  </ErrorMessage>
                 </div>
               </div>
               <div class="col-12 col-md-6">
@@ -111,7 +117,9 @@
                     placeholder="Maadi"
                     class="form-control"
                   />
-                  <ErrorMessage name="customer_address" />
+                  <ErrorMessage name="customer_address" v-slot="{message}" >
+                    <p class="text-danger">{{ message }}</p>
+                  </ErrorMessage>
                 </div>
               </div>
               <div class="col-12 col-md-6">
@@ -124,7 +132,9 @@
                     placeholder="cairo"
                     class="form-control"
                   />
-                  <ErrorMessage name="customer_city" />
+                  <ErrorMessage name="customer_city" v-slot="{message}" >
+                    <p class="text-danger">{{ message }}</p>
+                  </ErrorMessage>
                 </div>
               </div>
               <div class="col-12 col-md-6">
@@ -137,7 +147,9 @@
                     placeholder="egypt"
                     class="form-control"
                   />
-                  <ErrorMessage name="customer_country" />
+                  <ErrorMessage name="customer_country" v-slot="{message}" >
+                    <p class="text-danger">{{ message }}</p>
+                  </ErrorMessage>
                 </div>
               </div>
             </div>

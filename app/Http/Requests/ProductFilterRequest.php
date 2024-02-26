@@ -22,9 +22,9 @@ class ProductFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "sometimes|string",
-            "category" => "sometimes|exists:categories,id",
-            "sub_category" => "sometimes|exists:categories,id",
+            "name" => "sometimes|string|nullable",
+            "category" => "sometimes|exists:categories,id||nullable",
+            "sub_category" => "sometimes|exists:categories,id||nullable",
         ];
     }
 }
