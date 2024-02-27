@@ -27,6 +27,7 @@ Route::group(
         Route::middleware(['auth:sanctum'])->group(function () {
             Route::delete('/logout', 'AuthController@logout');
             Route::get('/category', 'CategoryController@index');
+            Route::get('/category/{category}', 'CategoryController@show');
             Route::post('/category/create', 'CategoryController@store');
             Route::put('/category/update/{category}', 'CategoryController@update');
 
@@ -37,6 +38,8 @@ Route::group(
             Route::put('/product/update/{product}', 'ProductController@update');
             Route::delete('/product/delete/{product}', 'ProductController@delete');
         });
+        Route::get('/category-list', 'CategoryController@mainCategories');
+        Route::get('/sub-category-list', 'CategoryController@subCategories');
 
         Route::group(['prefix' => '/cart'], function () {
             Route::get('/', 'ShoppingCartController@index');

@@ -22,8 +22,8 @@ class CategoryFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "sometimes|string",
-            "category" => "sometimes|exists:categories,id",
+            "name" => "sometimes|string|nullable",
+            "category" => "sometimes|exists:categories,id|nullable",
         ];
     }
 }

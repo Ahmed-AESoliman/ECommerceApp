@@ -14,6 +14,14 @@ class Category extends Model
         'parent_category',
     ];
 
+    public function subCategory()
+    {
+        return $this->hasMany(self::class, 'parent_category');
+    }
+    public function category()
+    {
+        return $this->belongsTo(self::class, 'parent_category');
+    }
     /**
      * @param $query
      * @param $request

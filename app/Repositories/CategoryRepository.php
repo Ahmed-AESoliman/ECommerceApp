@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Requests\CategoryFilterRequest;
 use App\Http\Resources\CategoriesCollection;
 use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\SingelCategoryResource;
 use App\Http\Responses\ApiResponse;
 use App\Interfaces\CategoryRepositoryInterface;
 use App\Models\Category;
@@ -24,14 +25,26 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function index(Request|CategoryFilterRequest $request): CategoriesCollection
     {
         return new CategoriesCollection(
-            $this->model->filter($request)->paginate($request->input('page_size'))
+            $this->model->filter($request)
+                ->whereNotNull('parent_category')
+                ->paginate($request->input('page_size'))
         );
     }
-
+    public function mainCategories(): JsonResponse
+    {
+        return ApiResponse::success($this->model->whereNull('parent_category')->select('id', 'category_name')->get());
+    }
+    public function subCategories($mainCategory): JsonResponse
+    {
+        return ApiResponse::success($this->model->whereNotNull('parent_category')->select('id', 'category_name')->get());
+    }
     public function store(array $data): JsonResponse
     {
         try {
-            $this->model->create($data);
+            $category = $this->model->create($data);
+            foreach ($data['sub_category'] as $val) {
+                $category->subCategory()->create(['category_name' => $val]);
+            }
             return ApiResponse::success(null, 'success created', 201);
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage());
@@ -50,7 +63,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function show(Model $model): JsonResponse
     {
-        return ApiResponse::success(new CategoriesResource($model));
+        return ApiResponse::success(new SingelCategoryResource($model));
     }
 
     public function delete(Model $model): JsonResponse

@@ -9,4 +9,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 interface CategoryRepositoryInterface extends BaseRepositoryInterface
 {
+    public function mainCategories(): JsonResponse;
+    public function subCategories($mainCategory): JsonResponse;
 }

@@ -24,11 +24,29 @@ class CategoryController extends Controller
     }
 
     /**
-     * Display a listing of Categories.
+     * Display a listing of Sub Categories.
      */
     public function index(CategoryFilterRequest $request)
     {
         return $this->categoryRepository->index($request);
+    }
+
+    /**
+     * Display a listing of Categories.
+     */
+    public function mainCategories()
+    {
+        return $this->categoryRepository->mainCategories();
+    }
+    /**
+     * Display a listing of sub Categories.
+     */
+    public function subCategories(Request $request)
+    {
+        $request->validate([
+            'main_category' => 'required|exists:categories,id'
+        ]);
+        return $this->categoryRepository->subCategories($request->main_category);
     }
 
     /**
@@ -47,5 +65,10 @@ class CategoryController extends Controller
     {
         $validatedData = $request->validated();
         return $this->categoryRepository->update($validatedData, $category);
+    }
+
+    public function show(Category $category)
+    {
+        return $this->categoryRepository->show($category);
     }
 }
