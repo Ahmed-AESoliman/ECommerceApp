@@ -105,15 +105,7 @@ export default {
 </script>
 
 <style scoped>
-a {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #00003a;
-    font-size: 20px;
-}
+
 
 /*tag input style*/
 

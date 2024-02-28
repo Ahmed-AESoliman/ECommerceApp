@@ -17,7 +17,8 @@ class CategoriesResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->category_name,
-            'main_category' => $this->category?->category_name,
+            'main_category' => $this->category?->category_name ?? $this->category_name,
+            'parent_category' => $this->parent_category ?? $this->id
         ];
     }
 }

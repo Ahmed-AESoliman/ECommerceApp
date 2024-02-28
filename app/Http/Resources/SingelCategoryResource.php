@@ -16,7 +16,7 @@ class SingelCategoryResource extends JsonResource
     {
         return [
             'name' => $this->category_name,
-            'name' => $this->subCategory->select('name'),
+            'sub_category' => $this->subCategory->pluck('category_name')->toArray(),
         ];
     }
 }

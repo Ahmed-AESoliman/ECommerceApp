@@ -2,12 +2,11 @@
 <div class="container">
     <NavBar />
     <AddCategory @refresh-tbl="refreshTbl" />
-    <UpdateCategory @refresh-tbl="refreshTbl" :selectedCategory="selectedCategory"/>
     <div class="row">
         <div class="col-12">
             <div class="row">
                 <div class="col-12 col-md-4">
-                    <label class="form-label">Product Name</label>
+                    <label class="form-label">Category Name</label>
                     <input type="text" class="form-control" v-model="name">
                 </div>
                 <div class="col-12 col-md-4">
@@ -35,16 +34,11 @@
                             <td>{{ categor.main_category }}</td>
                             <td>{{ categor.name }}</td>
                             <td class="text-primry">
-                                <div class="dropdown-center">
-                                    <button class="bg-transparent border-0 btn btn-secondary p-0 text-black" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item">delete</a></li>
-                                        <li><a class="dropdown-item">edit</a></li>
-                                    </ul>
-                                </div>
+                                <a data-bs-toggle="offcanvas" class="dropdown-item" :href="'#offcanvasUpdate_' + categor.parent_category" role="button" :aria-controls="'offcanvasUpdateLabel_' + selectedCategory">
+                                    edit
+                                </a>
                             </td>
+                            <UpdateCategory @refresh-tbl="refreshTbl" :selectedCategory="categor.parent_category" />
                         </tr>
                     </tbody>
                 </table>
@@ -92,7 +86,6 @@ export default {
             page: 1,
             maxPage: 1,
             refresh: 0,
-            selectedCategory:null
         }
     },
     methods: {
@@ -132,7 +125,7 @@ export default {
         },
         refreshTbl() {
             this.fetchCategories()
-        }
+        },
     },
     created() {
         this.fetchCategories()

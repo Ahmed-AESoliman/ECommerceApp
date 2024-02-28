@@ -26,7 +26,6 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return new CategoriesCollection(
             $this->model->filter($request)
-                ->whereNotNull('parent_category')
                 ->paginate($request->input('page_size'))
         );
     }
@@ -54,7 +53,19 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function update(array $data, Model $model): JsonResponse
     {
         try {
-            $model->update($data);
+            $model->update([
+                'category_name' => $data['category_name']
+            ]);
+            foreach ($model->subCategory as $subCategory) {
+                if (!in_array($subCategory->name, $data['sub_category'])) {
+                    if (!$subCategory->productBysubCategory->count() > 0) {
+                        $subCategory->forceDelete();
+                    }
+                }
+            }
+            foreach ($data['sub_category'] as $value) {
+                $model->subCategory()->updateOrCreate(['category_name' => $value]);
+            }
             return ApiResponse::success(null, 'success updated', 200);
         } catch (\Exception $e) {
             return ApiResponse::error($e->getMessage());

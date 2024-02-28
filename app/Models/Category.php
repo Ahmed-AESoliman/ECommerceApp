@@ -22,6 +22,11 @@ class Category extends Model
     {
         return $this->belongsTo(self::class, 'parent_category');
     }
+
+    public function productBysubCategory()
+    {
+        return $this->hasMany(Product::class, 'sub_category');
+    }
     /**
      * @param $query
      * @param $request

@@ -1,8 +1,8 @@
 <template>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasUpdate" aria-labelledby="offcanvasUpdateLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" :id="'offcanvasUpdate_' + selectedCategory" :aria-labelledby="'offcanvasUpdateLabel_' + selectedCategory">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasUpdateLabel">update Category</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <h5 class="offcanvas-title" :id="'offcanvasUpdateLabel_'+ selectedCategory">update Category</h5>
+        <button type="button" class="btn-close" :id="'close_'+selectedCategory" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
         <div class="row">
@@ -33,7 +33,12 @@
 <script>
 export default {
     name: "AddCategory",
-    props:["selectedCategory"],
+    props: {
+        selectedCategory: {
+            type: String,
+            default: null
+        }
+    },
     data() {
         return {
             categories: [],
@@ -53,7 +58,7 @@ export default {
                 return
             }
             this.$http
-                .post(`/api/category/create`, {
+                .put(`/api/category/update/${this.selectedCategory}`, {
                     category_name: this.name,
                     sub_category: this.categories,
                 }, {
@@ -62,8 +67,8 @@ export default {
                     }
                 })
                 .then((res) => {
+                    document.querySelector('#close_'+this.selectedCategory).click()
                     this.$emit('refresh-tbl')
-                    document.querySelector('.btn-close').click()
                 })
                 .catch((error) => {
                     console.error('Error store category:', error)
@@ -94,11 +99,18 @@ export default {
             }
         },
         fetchCategory() {
-            this.$http.get(``)
+            this.$http.get(`/api/category/${this.selectedCategory}`,{
+                    headers: {
+                        Authorization: `Bearer ${this.$cookies.get('token')}`
+                    }
+            }).then((res) => {
+                    this.categories=res.data.data.sub_category;
+                    this.name=res.data.data.name;
+                })
         }
     },
     created() {
-
+        this.fetchCategory()
     },
     watch: {
 
@@ -108,16 +120,6 @@ export default {
 </script>
 
 <style scoped>
-a {
-    position: absolute;
-    right: 15px;
-    bottom: 15px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #00003a;
-    font-size: 20px;
-}
-
 /*tag input style*/
 
 .tag-input {
