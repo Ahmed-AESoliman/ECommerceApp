@@ -34,6 +34,7 @@ Route::group(
             Route::get('/product', 'ProductController@index');
             Route::get('/product/{product}', 'ProductController@show');
             Route::post('/product/upload-attachment', 'ProductController@uploadAttachments');
+            Route::post('/product/remove-attachment', 'ProductController@removeAttachments');
             Route::post('/product/create', 'ProductController@store');
             Route::put('/product/update/{product}', 'ProductController@update');
             Route::delete('/product/delete/{product}', 'ProductController@delete');

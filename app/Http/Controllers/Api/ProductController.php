@@ -45,6 +45,14 @@ class ProductController extends Controller
         return $this->productRepository->uploadAttachments($request);
     }
 
+    public function removeAttachments(Request $request): JsonResponse
+    {
+        $request->validate([
+            'path' => 'required|string'
+        ]);
+        return $this->productRepository->removeAttachments($request->path);
+    }
+
     /**
      * @param StoreProductRequest $request
      * @return JsonResponse

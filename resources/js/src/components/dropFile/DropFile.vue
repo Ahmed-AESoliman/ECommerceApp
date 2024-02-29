@@ -7,20 +7,15 @@
             <div v-if="isDragging">Release to drop files here.</div>
             <div v-else>Drop files here or <u>click here</u> to upload.</div>
         </label>
-        <div class="preview-container mt-4" v-if="files.length">
-            <div v-for="file in files" :key="file.name" class="preview-card">
-                <div>
-                    <img class="preview-img" :src="generateURL(file) " />
-                    <p>
-                        {{ file.name }}
-                    </p>
-                </div>
-                <div>
-                    <button class="ml-2" type="button" @click="remove(files.indexOf(file))" title="Remove file">
-                        <b>×</b>
-                    </button>
-                </div>
-            </div>
+    </div>
+    <div class="preview-container mt-4" v-if="files.length||existsPath.length">
+        <div v-for="file in files" :key="file.name" class="preview-card">
+            <img class="preview-img" :src="generateURL(file) " />
+            <i class="bi bi-trash" @click="remove(files.indexOf(file))"></i>
+        </div>
+        <div v-for="(path,index) in existsPath" :key="index" class="preview-card">
+            <img class="preview-img" :src="`${getUlOrigin}/storage/${path}`" />
+            <i class="bi bi-trash" @click="remove(files.indexOf(file))"></i>
         </div>
     </div>
 </div>
@@ -28,12 +23,17 @@
 
 <script>
 export default {
+    props: {
+        existsPath: {
+            type: Array,
+            default: []
+        }
+    },
     data() {
         return {
             isDragging: false,
             files: [],
             filePaths: [],
-            existsPath:[]
         };
     },
     methods: {
@@ -51,8 +51,9 @@ export default {
             this.isDragging = false;
         },
         remove(i) {
-            this.files.splice(i, 1);
-            this.filePaths.splice(i, 1);
+            // this.files.splice(i, 1);
+            // this.filePaths.splice(i, 1);
+            console.log(this.files[i]);
         },
         generateURL(file) {
             let fileSrc = URL.createObjectURL(file);
@@ -79,27 +80,27 @@ export default {
                     this.$http.post(`/api/product/upload-attachment`, form, {
                         headers: {
                             "Content-Type": "multipart/form-data",
-                             "Authorization": `Bearer ${this.$cookies.get('token')}`
+                            "Authorization": `Bearer ${this.$cookies.get('token')}`
                         }
                     }).then((res) => {
                         this.filePaths.push(res.data.data)
-                        file.path=res.data.data
+                        file.path = res.data.data
                         self.files.push(file);
                     })
                 });
             }
         },
     },
+    computed: {
+        getUlOrigin() {
+            return window.location.origin
+        }
+    }
 };
 </script>
 
 <style scoped>
 .main {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    height: 100vh;
-    justify-content: center;
     text-align: center;
 }
 
@@ -131,17 +132,27 @@ export default {
 }
 
 .preview-card {
-    display: flex;
-    border: 1px solid #a2a2a2;
     padding: 5px;
     margin-left: 5px;
+    width: 200px;
+    position: relative;
+    height: 225px;
 }
 
 .preview-img {
-    width: 50px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
     border-radius: 5px;
     border: 1px solid #a2a2a2;
     background-color: #a2a2a2;
+
+}
+
+.bi.bi-trash {
+    font-size: 1.5rem;
+    color: #c20606;
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
 }
 </style>
